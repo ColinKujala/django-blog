@@ -2,7 +2,14 @@ import datetime
 
 from django.test import TestCase
 from django.contrib.auth.models import User
-from django.utils.timezone import utc
+from django.utils.timezone import now
+"""
+Course content had me import utc from django.utils.timezone, but it didn't
+work. I assume because it is deprecated from the older version. I instead
+brought in the now function from that location, and used it to create
+a datetime value based on the setting of UTC timezone, and I was able
+to look up the tzinfo value from that datetime object.
+"""
 
 from blogging.models import Post, Category
 
@@ -16,7 +23,12 @@ class FrontEndTestCase(TestCase):
     def setUp(self):
         self.now = datetime.datetime.now(
             datetime.timezone.utc
-        ).replace(tzinfo=utc)
+        ).replace(tzinfo=now().tzinfo)
+        """
+        above line instead of doing datetime.datetime.utcnow(), which was
+        deprecated, I did the now function and passed into that function
+        the datetime.timezone.utc timezone value.
+        """
         self.timedelta = datetime.timedelta(15)
         author = User.objects.get(pk=1)
         for count in range(1, 11):
@@ -30,6 +42,18 @@ class FrontEndTestCase(TestCase):
                 pubdate = self.now - self.timedelta * count
                 post.published_date = pubdate
             post.save()
+    
+    def test_list_only_published(self):
+        resp = self.client.get('/')
+        # The content of the renered response is always a byte-string
+        resp_text = resp.content.decode(resp.charset)
+        self.assertTrue("Recent Posts" in resp_text)
+        for count in range(1, 11):
+            title = "Post %d Title" % count
+            if count < 6:
+                self.assertContains(resp, title, count=1)
+            else:
+                self.assertNotContains(resp, title)
 
 
 class PostTestCase(TestCase):
