@@ -54,6 +54,26 @@ class FrontEndTestCase(TestCase):
                 self.assertContains(resp, title, count=1)
             else:
                 self.assertNotContains(resp, title)
+    
+    def test_details_only_published(self):
+        for count in range(1, 11):
+            title = "Post %d Title" % count
+            post = Post.objects.get(title=title)
+            resp = self.client.get('/posts/%d' % post.pk, follow=True)
+            """
+            Note to self
+
+            I had to add follow=True to my client.get call above or else
+            the resp was not getting any content and was a response of a
+            redirect url. setting follow=True, the redirect gets us to the
+            url we actually want to return, a 200 response and the content
+            of the details page for our blogging site.
+            """
+            if count < 6:
+                self.assertEqual(resp.status_code, 200)
+                self.assertContains(resp, title)
+            else:
+                self.assertEqual(resp.status_code, 404)
 
 
 class PostTestCase(TestCase):

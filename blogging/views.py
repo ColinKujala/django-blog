@@ -33,3 +33,12 @@ and then making a body with that template.render(context),
 can instead just bring in the django.shortcuts.render and do
 render(request, 'some template.html', context)
 """
+
+def detail_view(request, post_id):
+    published = Post.objects.exclude(published_date__exact=None)
+    try:
+        post = published.get(pk=post_id)
+    except Post.DoesNotExist:
+        raise Http404
+    context = {'post': post}
+    return render(request, 'blogging/detail.html', context)
