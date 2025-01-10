@@ -36,6 +36,17 @@ body {
 #control-bar li a:hover {
     color: #cce;
 }
+#control-bar li form input {
+    display: inline-block;
+    background-color: #333;
+    border: none;
+    color: #eee;
+    padding: 0.5em;
+    text-decoration: none;
+}
+#control-bar li form input:hover {
+    color: #cce;
+}
 #content {
     margin: 0em 1em 1em;
 }
