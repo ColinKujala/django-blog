@@ -19,7 +19,17 @@ def stub_view(request, *args, **kwargs):
 def list_view(request):
     published = Post.objects.exclude(published_date__exact=None)
     posts = published.order_by('-published_date')
-    template = loader.get_template('blogging/list.html')
     context = {'posts': posts}
-    body = template.render(context)
-    return HttpResponse(body, content_type="text/html")
+    return render(request, 'blogging/list.html', context)
+
+"""
+Note to self
+
+Job of views is to build a context and then render a template.
+There is a shortcut from django to more easily render a template.
+instead of getting a template with 
+django.template.loader.get_template('some template.html')
+and then making a body with that template.render(context),
+can instead just bring in the django.shortcuts.render and do
+render(request, 'some template.html', context)
+"""
