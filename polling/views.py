@@ -8,28 +8,30 @@ from django.views.generic.detail import DetailView
 #     context = {'polls': Poll.objects.all()}
 #     return render(request, 'polling/list.html', context)
 
-class ListView():
+
+class ListView:
     """base ListView class"""
 
     def as_view(self):
         """Need this in order to be able to use 'get' as a view"""
         return self.get
-    
+
     def get(self, request):
-        model_list_name = self.model.__name__.lower() + '_list'
+        model_list_name = self.model.__name__.lower() + "_list"
         context = {model_list_name: self.model.objects.all()}
         return render(request, self.template_name, context)
 
 
 class PollListView(ListView):
     """List view for Polls"""
+
     model = Poll
-    template_name = 'polling/list.html'
+    template_name = "polling/list.html"
 
 
 class PollDetailView(DetailView):
     model = Poll
-    template_name = 'polling/detail.html'
+    template_name = "polling/detail.html"
 
     def post(self, request, *args, **kwargs):
         """

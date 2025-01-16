@@ -16,6 +16,7 @@ def stub_view(request, *args, **kwargs):
         body += "\n".join(["\t%s: %s" % i for i in kwargs.items()])
     return HttpResponse(body, content_type="text/plain")
 
+
 """
 Replacing function views with class-based views
 
@@ -25,12 +26,15 @@ def list_view(request):
     context = {'posts': posts}
     return render(request, 'blogging/list.html', context)
 """
+
+
 class BlogListView(ListView):
     """Blog list view"""
-    queryset = Post.objects.exclude(
-        published_date__exact=None
-    ).order_by('-published_date')
-    template_name = 'blogging/list.html'
+
+    queryset = Post.objects.exclude(published_date__exact=None).order_by(
+        "-published_date"
+    )
+    template_name = "blogging/list.html"
 
 
 """
@@ -45,10 +49,13 @@ def detail_view(request, post_id):
     context = {'post': post}
     return render(request, 'blogging/detail.html', context)
 """
+
+
 class BlogDetailView(DetailView):
     """Blog detail view"""
+
     queryset = Post.objects.exclude(published_date__exact=None)
-    template_name = 'blogging/detail.html'
+    template_name = "blogging/detail.html"
 
 
 """
