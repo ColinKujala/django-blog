@@ -45,7 +45,7 @@ class FrontEndTestCase(TestCase):
         resp = self.client.get("/")
         # The content of the renered response is always a byte-string
         resp_text = resp.content.decode(resp.charset)
-        self.assertTrue("My Cool Blog Posts" in resp_text)
+        self.assertTrue("All Posts" in resp_text)
         for count in range(1, 11):
             title = "Post %d Title" % count
             if count < 6:
