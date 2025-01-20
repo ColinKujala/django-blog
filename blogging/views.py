@@ -1,9 +1,13 @@
-from django.shortcuts import render
+from datetime import datetime
+
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.template import loader
 from django.views.generic import ListView, DetailView
+from django.contrib import messages
 
 from blogging.models import Post
+from blogging.forms import AddPostForm
 
 
 def stub_view(request, *args, **kwargs):
@@ -69,3 +73,29 @@ and then making a body with that template.render(context),
 can instead just bring in the django.shortcuts.render and do
 render(request, 'some template.html', context)
 """
+
+
+def add_post_view(request):
+    """View for adding a post to the blog"""
+    if not request.user.is_authenticated:
+        messages.error(request, "Please log in to add posts.")
+        return redirect("account_login")
+    if request.method == "POST":
+        add_form = AddPostForm(request.POST)
+        new_post = add_form.save(commit=False)
+        new_post.author = request.user
+        new_post.published_date = datetime.now()
+        if add_form.is_valid():
+            new_post.save()
+            messages.success(request, ("Your post has been published!"))
+        else:
+            messages.error(request, "Error publishing your post")
+
+        return redirect("blog_index")
+
+    add_form = AddPostForm()
+    return render(
+        request=request,
+        template_name="blogging/add.html",
+        context={"add_form": add_form},
+    )

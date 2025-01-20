@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
+    <p></p>
+    <button id="go-add"><a href="{% url 'add_post' %}">New Post</a></button>
     <h1>All Posts</h1>
     {% comment %} here is where the query happens {% endcomment %}
     {% for post in post_list %}
