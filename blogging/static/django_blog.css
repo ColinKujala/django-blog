@@ -50,20 +50,10 @@ body {
 #content {
     margin: 0em 1em 1em;
 }
-#go-add {
-    color: #eee;
-    padding: 0.5em;
-    text-decoration: none;
-}
 #go-add a {
-    color: #eee;
+    color: #111;
     padding: 0.5em;
     text-decoration: none;
-}
-#go-add a:hover {
-    color: #eee;
-    padding: 0.5em;
-    text-decoration: underline;
 }
 
 ul#entries {
